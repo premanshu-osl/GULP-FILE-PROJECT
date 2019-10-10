@@ -1,0 +1,14 @@
+.some-class {
+  .importance {
+    height: 40px;
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-grow: 1;
+    top: 90;
+    text-align: center;
+    right: 40;
+    line-height: 1.25; 
+  }
+}
