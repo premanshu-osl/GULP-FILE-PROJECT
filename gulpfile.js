@@ -1,4 +1,4 @@
-const { src, dest, watch, series, parallel} = require('gulp');
+const { task, src, dest, watch, series, parallel} = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
 const csscomb = require('gulp-csscomb');
@@ -30,6 +30,11 @@ function watchTask() {
   watch([files.scssPath],
     parallel(scssTask));
 }
+
+exports.build = series(
+  parallel(scssTask),
+  watchTask
+);
 
 exports.default = series(
   parallel(scssTask),
