@@ -4,9 +4,12 @@ const sass = require('gulp-sass');
 const csscomb = require('gulp-csscomb');
 const sourcemaps = require('gulp-sourcemaps');
 const bless = require('gulp-bless');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify'); 
 
 const files = {
-  scssPath: 'src/sass/**/*.scss'
+  scssPath: 'src/sass/**/*.{scss, sass}',
+  jsPath: 'src/js/**/*.js'
 }
 
 const prefixerOptions = {
@@ -26,17 +29,27 @@ function scssTask() {
   );
 }
 
+function jsTask(){
+  return src([
+      files.jsPath
+      ])
+      .pipe(concat('combined.js'))
+      .pipe(uglify())
+      .pipe(dest('dist')
+  );
+}
+
+
 function watchTask() {
-  watch([files.scssPath],
-    parallel(scssTask));
+  watch([files.scssPath, files.jsPath],
+    parallel(scssTask, jsTask));
 }
 
 exports.build = series(
-  parallel(scssTask),
+  parallel(scssTask, jsTask),
   watchTask
 );
 
 exports.default = series(
-  parallel(scssTask),
-  watchTask
+  parallel(scssTask, jsTask)
 );
