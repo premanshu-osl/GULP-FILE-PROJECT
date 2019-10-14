@@ -5,7 +5,8 @@ const csscomb = require('gulp-csscomb');
 const sourcemaps = require('gulp-sourcemaps');
 const bless = require('gulp-bless');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify'); 
+const uglify = require('gulp-uglify');
+const babel = require('gulp-babel'); 
 
 const files = {
   scssPath: 'src/sass/**/*.{scss, sass}',
@@ -15,6 +16,10 @@ const files = {
 const prefixerOptions = {
   browsers: ['last 2 versions']
 };
+
+const environment = {
+  presets: ['@babel/env']
+}
 
 function scssTask() {
   return src(files.scssPath)
@@ -33,9 +38,12 @@ function jsTask(){
   return src([
       files.jsPath
       ])
+      .pipe(sourcemaps.init())
+      .pipe(babel(environment))
       .pipe(concat('combined.js'))
       .pipe(uglify())
-      .pipe(dest('dist')
+      .pipe(sourcemaps.write('.'))
+      .pipe(dest('dist/js/')
   );
 }
 
